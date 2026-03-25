@@ -2,7 +2,7 @@
 
 Pipeline de données avec dbt et Snowflake pour analyser le funnel de missions d'un freelance, avec génération automatique d'un diagramme de Sankey interactif.
 
-## 🎯 Fonctionnalités
+## Fonctionnalités
 
 * **Pipeline dbt complet** avec tests de qualité
 * **Export automatique** depuis Snowflake
@@ -11,7 +11,7 @@ Pipeline de données avec dbt et Snowflake pour analyser le funnel de missions d
 * **Auto-détection des batches** de données
 * **Métriques automatiques** (taux de conversion, analyses)
 
-## 🏗️ Architecture
+## Architecture
 
 ```txt
 📦 BRONZE (CSV) → 📦 SILVER (dbt models) → 📊 Sankey HTML
@@ -21,7 +21,7 @@ Pipeline de données avec dbt et Snowflake pour analyser le funnel de missions d
 * **Transformations** : Models dbt avec tests de qualité
 * **Output** : Diagramme interactif avec analyses automatiques
 
-## 🚀 Utilisation
+## Utilisation
 
 ### Pipeline complet automatisé
 
@@ -46,7 +46,7 @@ python scripts/export_sankey_data.py
 python scripts/create_sankey_elegant.py
 ```
 
-## 📁 Structure
+## Structure
 
 ```txt
 ├── models/
@@ -58,13 +58,13 @@ python scripts/create_sankey_elegant.py
 └── sankey_auto.py        # Pipeline automatique
 ```
 
-## 🧪 Tests Implémentés
+## Tests Implémentés
 
 * **Tests dbt** : unique, not_null, relationships, accepted_values
 * **Test personnalisé** : Vérification intégrité des transitions
 * **Pipeline CI/CD** : Tests automatiques sur GitLab
 
-## 📊 Résultat
+## Résultat
 
 Génère automatiquement :
 
@@ -72,7 +72,7 @@ Génère automatiquement :
 * **Métriques clés** : Taux de conversion, missions en cours
 * **Analyse automatique** : Recommandations basées sur les données
 
-## 🛠️ Technologies
+## Technologies
 
 * **dbt** : Transformations et tests SQL
 * **Snowflake** : Data warehouse cloud
