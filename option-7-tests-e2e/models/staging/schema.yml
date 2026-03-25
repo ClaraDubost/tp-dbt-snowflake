@@ -1,0 +1,159 @@
+version: 2
+
+models:
+  # ========== TABLES DE STAGING ==========
+  - name: stg_entreprises
+    description: |
+      **Table des entreprises nettoyée et standardisée**
+      
+      Source des données prospects et clients pour l'analyse du funnel commercial.
+      Contient les informations de base sur chaque entreprise contactée.
+      
+      **Fréquence de mise à jour :** Quotidienne
+      **Source :** dim_entreprises (seeds)
+    columns:
+      - name: id_entreprise
+        description: "🔑 Identifiant unique de l'entreprise (clé primaire)"
+        tests:
+          - unique
+          - not_null
+      - name: nom_entreprise
+        description: "📰 Nom commercial de l'entreprise"
+        tests:
+          - not_null
+      - name: secteur_activite
+        description: "🏭 Secteur d'activité principal de l'entreprise"
+      - name: taille_entreprise
+        description: "📊 Catégorie de taille (PME, Startup, Grande entreprise)"
+        tests:
+          - accepted_values:
+              values: ['PME', 'Startup', 'Grande entreprise']
+      - name: ville
+        description: "📍 Ville de localisation du siège social"
+      - name: loaded_at
+        description: "⏰ Timestamp de chargement dans dbt"
+
+  - name: stg_commerciaux
+    description: |
+      **Table des contacts commerciaux nettoyée**
+      
+      Répertoire des personnes contacts dans chaque entreprise.
+      Permet de tracer qui propose les missions et d'analyser l'efficacité par commercial.
+      
+      **Fréquence de mise à jour :** Quotidienne
+      **Source :** dim_commercial (seeds)
+    columns:
+      - name: id_commercial
+        description: "🔑 Identifiant unique du commercial (clé primaire)"
+        tests:
+          - unique
+          - not_null
+      - name: id_entreprise
+        description: "🔗 Référence vers l'entreprise (clé étrangère)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_entreprises')
+              field: id_entreprise
+      - name: nom_commercial
+        description: "👤 Nom de famille du contact commercial"
+      - name: prenom_commercial
+        description: "👤 Prénom du contact commercial"
+      - name: email_commercial
+        description: "📧 Adresse email professionnelle (unique)"
+        tests:
+          - not_null
+          - unique
+      - name: telephone
+        description: "📞 Numéro de téléphone direct"
+      - name: loaded_at
+        description: "⏰ Timestamp de chargement dans dbt"
+
+  - name: stg_missions
+    description: |
+      **Table des missions proposées nettoyée**
+      
+      Catalogue de toutes les missions freelance proposées par les commerciaux.
+      Base pour l'analyse de la performance commerciale et du funnel de conversion.
+      
+      **Fréquence de mise à jour :** Quotidienne
+      **Source :** dim_missions (seeds)
+    columns:
+      - name: id_mission
+        description: "🔑 Identifiant unique de la mission (clé primaire)"
+        tests:
+          - unique
+          - not_null
+      - name: id_commercial
+        description: "🔗 Référence vers le commercial prescripteur (clé étrangère)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_commerciaux')
+              field: id_commercial
+      - name: titre_mission
+        description: "📋 Titre descriptif de la mission"
+      - name: description_mission
+        description: "📝 Description détaillée des tâches et responsabilités"
+      - name: duree_mission_jours
+        description: "📅 Durée prévue de la mission en jours"
+      - name: salaire_propose_euros
+        description: "💰 Rémunération proposée en euros"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: competences_requises
+        description: "🎯 Compétences techniques nécessaires"
+      - name: date_creation
+        description: "📅 Date de création de l'offre de mission"
+      - name: loaded_at
+        description: "⏰ Timestamp de chargement dans dbt"
+
+  - name: base_statuts_missions
+    description: |
+      **Table consolidée des évolutions de statuts des missions**
+      
+      Historique complet des changements de statut pour chaque mission.
+      Construit dynamiquement à partir de tous les fichiers fct_missions_*.
+      Permet l'analyse du funnel de conversion et l'identification des goulots d'étranglement.
+      
+      **Logique de construction :** Union automatique de tous les seeds fct_missions
+      **Fréquence de mise à jour :** Temps réel (à chaque run dbt)
+    columns:
+      - name: id_mission
+        description: "🔗 Référence vers la mission (clé étrangère)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_missions')
+              field: id_mission
+              where: "date_statut >= '{{ var('test_date', '2024-01-01') }}'"
+      - name: statut
+        description: |
+          **📊 Statut actuel de la mission dans le funnel**
+          
+          Valeurs possibles :
+          - 🆕 **Nouveau** : Mission just proposée
+          - 📞 **Premier contact** : Premier échange avec le client
+          - 📅 **Entretien planifié** : RDV programmé
+          - ✅ **Entretien réalisé** : Entretien terminé
+          - 📋 **Proposition envoyée** : Devis/contrat envoyé
+          - 🤝 **Négociation** : Discussion en cours
+          - ✅ **Accepté** : Mission acceptée (succès)
+          - ❌ **Refusé** : Mission refusée (échec)
+          - 🚫 **Abandonné** : Processus interrompu
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Nouveau', 'Premier contact', 'Entretien planifié', 'Entretien réalisé', 'Proposition envoyée', 'Négociation', 'Refusé', 'Abandonné', 'Accepté']
+      - name: date_statut
+        description: "📅 Date et heure du changement de statut"
+        tests:
+          - not_null
+      - name: commentaire
+        description: "💬 Commentaire libre sur le changement de statut"
+      - name: source_batch
+        description: "📦 Nom du fichier source pour traçabilité"
+      - name: loaded_at
+        description: "⏰ Timestamp de chargement dans dbt"

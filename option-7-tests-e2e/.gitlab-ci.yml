@@ -1,0 +1,82 @@
+image: python:3.12
+
+variables:
+  DBT_PROFILES_DIR: .
+
+before_script:
+  - pip install dbt-snowflake pandas plotly python-dotenv snowflake-connector-python
+  - dbt deps
+  # Créer le profiles.yml avec les variables d'environnement
+  - mkdir -p ~/.dbt
+  - |
+    cat > ~/.dbt/profiles.yml << EOF
+    mon_projet_dbt:
+      target: prod
+      outputs:
+        prod:
+          type: snowflake
+          account: $DBT_SNOWFLAKE_ACCOUNT
+          user: $DBT_SNOWFLAKE_USER
+          password: $DBT_SNOWFLAKE_PASSWORD
+          warehouse: $DBT_SNOWFLAKE_WAREHOUSE
+          database: $DBT_SNOWFLAKE_DATABASE
+          schema: $DBT_SNOWFLAKE_SCHEMA
+          role: $DBT_SNOWFLAKE_ROLE
+          threads: 4
+    EOF
+
+stages:
+  - build
+  - test
+  - docs
+  - integration_tests
+
+dbt_build:
+  stage: build
+  script:
+    - echo "🧪 Test de connexion..."
+    - dbt debug
+    - echo "🌱 Chargement des seeds..."
+    - dbt seed
+    - echo "🔄 Exécution des transformations..."
+    - dbt run
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 hour
+
+dbt_test:
+  stage: test
+  dependencies:
+    - dbt_build
+  script:
+    - echo "🧪 Lancement des tests de qualité..."
+    - dbt test
+
+dbt_docs:
+  stage: docs
+  dependencies:
+    - dbt_test
+  script:
+    - echo "📚 Génération de la documentation..."
+    - dbt docs generate
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 week
+  only:
+    - main
+
+integration_tests:
+  stage: integration_tests
+  dependencies:
+    - dbt_test
+  script:
+    - echo "🎯 Tests d'intégration bout en bout..."
+    - dbt seed --select integration_tests
+    - |
+      dbt run --vars '{"integration_test_mode": true}'
+    - dbt run-operation test_integration_pipeline
+  allow_failure: false
+  only:
+    - main

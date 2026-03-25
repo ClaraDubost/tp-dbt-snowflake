@@ -1,0 +1,149 @@
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'mon_projet_dbt'
+version: '1.0.0'
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'mon_projet_dbt'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+# Configuration pour les seeds - chargement dans BRONZE
+seeds:
+  mon_projet_dbt:
+    +database: BRONZE
+    dim_entreprises:
+      +column_types:
+        id_entreprise: number
+        nom_entreprise: varchar(255)
+        secteur_activite: varchar(255)
+        taille_entreprise: varchar(100)
+        ville: varchar(100)
+    dim_commercial:
+      +column_types:
+        id_commercial: number
+        id_entreprise: number
+        nom_commercial: varchar(255)
+        prenom_commercial: varchar(255)
+        email_commercial: varchar(255)
+        telephone: varchar(20)
+    dim_missions:
+      +column_types:
+        id_mission: number
+        id_commercial: number
+        titre_mission: varchar(255)
+        description_mission: varchar(500)
+        duree_mission_jours: number
+        salaire_propose_euros: number
+        competences_requises: varchar(500)
+        date_creation: date
+    fct_missions:
+      +column_types:
+        id_mission: number
+        statut: varchar(100)
+        date_statut: date
+        commentaire: varchar(500)
+    fct_missions_batch2:
+      +column_types:
+        id_mission: number
+        statut: varchar(100)
+        date_statut: date
+        commentaire: varchar(500)
+    integration_tests:
+      +database: BRONZE
+      +schema: integration_test
+      input:
+        test_dim_entreprises:
+          +column_types:
+            id_entreprise: number
+            nom_entreprise: varchar(255)
+            secteur_activite: varchar(255)
+            taille_entreprise: varchar(100)
+            ville: varchar(100)
+        test_dim_commercial:
+          +column_types:
+            id_commercial: number
+            id_entreprise: number
+            nom_commercial: varchar(255)
+            prenom_commercial: varchar(255)
+            email_commercial: varchar(255)
+            telephone: varchar(20)
+        test_dim_missions:
+          +column_types:
+            id_mission: number
+            id_commercial: number
+            titre_mission: varchar(255)
+            description_mission: varchar(500)
+            duree_mission_jours: number
+            salaire_propose_euros: number
+            competences_requises: varchar(500)
+            date_creation: date
+        test_fct_missions:
+          +column_types:
+            id_mission: number
+            statut: varchar(100)
+            date_statut: date
+            commentaire: varchar(500)
+      expected:
+        expected_stg_entreprises:
+          +column_types:
+            id_entreprise: number
+            nom_entreprise: varchar(255)
+            secteur_activite: varchar(255)
+            taille_entreprise: varchar(100)
+            ville: varchar(100)
+        
+        expected_stg_commerciaux:
+          +column_types:
+            id_commercial: number
+            id_entreprise: number
+            nom_commercial: varchar(255)
+            prenom_commercial: varchar(255)
+            email_commercial: varchar(255)
+            telephone: varchar(20)
+        
+        expected_stg_missions:
+          +column_types:
+            id_mission: number
+            id_commercial: number
+            titre_mission: varchar(255)
+            description_mission: varchar(500)
+            duree_mission_jours: number
+            salaire_propose_euros: number
+            competences_requises: varchar(500)
+            date_creation: date
+        
+        expected_base_statuts_missions:
+          +column_types:
+            id_mission: number
+            statut: varchar(100)
+            date_statut: date
+            commentaire: varchar(500)
+
+# This section configures the default database schema for models, seeds, and snapshots.
+# Configuring models
+models:
+  mon_projet_dbt:
+    staging:
+      +materialized: table
+      +database: SILVER
+    marts:        
+      +materialized: table
+      +database: SILVER
+
+vars:
+  integration_test_mode: false

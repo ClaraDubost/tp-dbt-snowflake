@@ -1,0 +1,11 @@
+id_entreprise,nom_entreprise,secteur_activite,taille_entreprise,ville
+1,TechCorp Solutions,IT,PME,Paris
+2,DataViz Analytics,Data Science,Startup,Lyon
+3,ConsultPlus,Conseil,Grande entreprise,Marseille
+4,FinanceHub,Finance,PME,Nantes
+5,MarketingBoost,Marketing Digital,Startup,Bordeaux
+6,CloudSystems,Cloud Computing,PME,Toulouse
+7,RetailMax,E-commerce,Grande entreprise,Paris
+8,HealthTech Innovations,HealthTech,Startup,Lille
+9,AutoMobile Solutions,Automobile,Grande entreprise,Strasbourg
+10,EcoGreen Energy,Energie Renouvelable,PME,Rennes

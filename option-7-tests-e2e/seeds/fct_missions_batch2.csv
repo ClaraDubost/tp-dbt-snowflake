@@ -1,0 +1,42 @@
+id_mission,statut,date_statut,commentaire
+1008,Nouveau,2024-02-20,Mission reçue
+1008,Premier contact,2024-02-21,Appel initial architecte
+1008,Entretien planifié,2024-02-23,Entretien technique prévu
+1008,Entretien réalisé,2024-02-23,Discussion architecture
+1008,Proposition envoyée,2024-02-25,Proposition technique
+1008,Accepté,2024-02-28,Mission validée
+1009,Nouveau,2024-02-25,Mission reçue
+1009,Premier contact,2024-02-26,Contact designer
+1009,Entretien planifié,2024-02-28,Présentation portfolio
+1009,Entretien réalisé,2024-02-28,Portfolio apprécié
+1009,Proposition envoyée,2024-03-01,Devis design
+1009,Négociation,2024-03-03,Discussion délais
+1009,Refusé,2024-03-05,Délais trop courts
+1010,Nouveau,2024-03-01,Mission reçue
+1010,Premier contact,2024-03-02,Appel développeur
+1010,Abandonné,2024-03-03,Pas de retour client
+1011,Nouveau,2024-03-05,Mission reçue
+1011,Premier contact,2024-03-06,Discussion projet ML
+1011,Entretien planifié,2024-03-08,Entretien équipe R&D
+1011,Entretien réalisé,2024-03-08,Présentation expérience IA
+1011,Proposition envoyée,2024-03-10,Proposition détaillée
+1011,Négociation,2024-03-12,Négociation conditions
+1011,Accepté,2024-03-15,Accord final trouvé
+1012,Nouveau,2024-03-10,Mission reçue
+1012,Premier contact,2024-03-11,Contact développeur mobile
+1012,Entretien planifié,2024-03-13,Demo applications
+1012,Entretien réalisé,2024-03-13,Demo très appréciée
+1012,Proposition envoyée,2024-03-15,Proposition mobile
+1012,Accepté,2024-03-18,Mission acceptée rapidement
+1013,Nouveau,2024-03-15,Mission reçue
+1013,Premier contact,2024-03-16,Appel consultant green
+1013,Entretien planifié,2024-03-18,Audit site prévu
+1013,Entretien réalisé,2024-03-18,Visite site effectuée
+1013,Proposition envoyée,2024-03-20,Rapport audit
+1013,Négociation,2024-03-22,Discussion recommandations
+1013,Accepté,2024-03-25,Mission validée
+1014,Nouveau,2024-03-20,Mission reçue
+1014,Premier contact,2024-03-21,Contact tech lead
+1014,Entretien planifié,2024-03-23,Entretien leadership
+1015,Nouveau,2024-03-25,Mission reçue
+1015,Premier contact,2024-03-26,Appel business analyst

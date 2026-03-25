@@ -1,0 +1,40 @@
+id_mission,statut,date_statut,commentaire
+1001,Nouveau,2024-01-15,Mission reçue
+1001,Premier contact,2024-01-16,Appel téléphonique initial
+1001,Entretien planifié,2024-01-18,RDV fixé pour le 22/01
+1001,Entretien réalisé,2024-01-22,Entretien technique passé
+1001,Proposition envoyée,2024-01-24,Devis envoyé
+1001,Accepté,2024-01-26,Mission acceptée - début 01/02
+1002,Nouveau,2024-01-20,Mission reçue
+1002,Premier contact,2024-01-22,Email de présentation
+1002,Entretien planifié,2024-01-25,Visio prévue
+1002,Entretien réalisé,2024-01-25,Entretien satisfaisant
+1002,Proposition envoyée,2024-01-26,Proposition tarifaire
+1002,Négociation,2024-01-30,Discussion sur les tarifs
+1002,Accepté,2024-02-02,Accord trouvé
+1003,Nouveau,2024-01-25,Mission reçue
+1003,Premier contact,2024-01-26,Première prise de contact
+1003,Refusé,2024-01-27,Profil pas adapté selon client
+1004,Nouveau,2024-02-01,Mission reçue
+1004,Premier contact,2024-02-03,Appel de qualification
+1004,Entretien planifié,2024-02-05,Entretien sur site prévu
+1004,Entretien réalisé,2024-02-05,Entretien avec l'équipe
+1004,Proposition envoyée,2024-02-07,Proposition détaillée
+1004,Négociation,2024-02-10,Négociation durée mission
+1004,Accepté,2024-02-12,Mission acceptée
+1005,Nouveau,2024-02-05,Mission reçue
+1005,Premier contact,2024-02-06,Contact téléphonique
+1005,Entretien planifié,2024-02-08,Entretien avec direction
+1005,Entretien réalisé,2024-02-08,Présentation expérience
+1005,Proposition envoyée,2024-02-10,Proposition complète
+1005,Refusé,2024-02-15,Tarif trop élevé pour budget
+1006,Nouveau,2024-02-10,Mission reçue
+1006,Premier contact,2024-02-11,Discussion besoins
+1006,Abandonné,2024-02-12,Plus de nouvelles du client
+1007,Nouveau,2024-02-15,Mission reçue
+1007,Premier contact,2024-02-16,Appel de découverte
+1007,Entretien planifié,2024-02-18,RDV fixé
+1007,Entretien réalisé,2024-02-18,Audit SEO présenté
+1007,Proposition envoyée,2024-02-20,Devis SEO envoyé
+1007,Négociation,2024-02-22,Discussion périmètre
+1007,Accepté,2024-02-25,Mission confirmée

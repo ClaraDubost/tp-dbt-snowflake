@@ -1,0 +1,3 @@
+id_mission,id_commercial,titre_mission,description_mission,duree_mission_jours,salaire_propose_euros,competences_requises,date_creation
+1,1,Dev Python,Développement application,30,5000,Python Flask,2024-01-15
+2,2,Analyse données,Dashboard analytics,20,3500,SQL Tableau,2024-02-01

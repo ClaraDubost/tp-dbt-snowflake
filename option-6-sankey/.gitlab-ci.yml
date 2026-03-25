@@ -1,0 +1,64 @@
+image: python:3.12
+
+variables:
+  DBT_PROFILES_DIR: .
+
+before_script:
+  - pip install dbt-snowflake pandas plotly python-dotenv snowflake-connector-python
+  - dbt deps  # ← FIX : Installer les packages à CHAQUE job
+
+stages:
+  - build
+  - test
+  - docs
+
+dbt_build:
+  stage: build
+  script:
+    - echo "🌱 Chargement des seeds..."
+    - dbt seed
+    - echo "🔄 Exécution des transformations..."
+    - dbt run
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 hour
+
+dbt_test:
+  stage: test
+  dependencies:
+    - dbt_build
+  script:
+    - echo "🧪 Lancement des tests de qualité..."
+    - dbt test
+
+dbt_docs:
+  stage: docs
+  dependencies:
+    - dbt_test
+  script:
+    - echo "📚 Génération de la documentation..."
+    - dbt docs generate
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 week
+  only:
+    - main
+
+generate_sankey:
+  stage: docs
+  dependencies:
+    - dbt_test
+  script:
+    - echo "🎨 Génération du diagramme Sankey..."
+    - pip install pandas plotly
+    - python scripts/export_sankey_data.py
+    - python scripts/create_sankey_elegant.py
+  artifacts:
+    paths:
+      - outputs/sankey_missions.html
+    expire_in: 1 week
+  allow_failure: true
+  only:
+    - main

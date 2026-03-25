@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  # ========== TABLES MARTS (ANALYTIQUES) ==========
+  - name: fct_missions_incremental
+    description: |
+      **Table de faits des missions avec chargement incrémental simple**
+      
+      Vue consolidée des missions avec leurs statuts et informations enrichies.
+      Matérialisée en mode incrémental pour optimiser les performances.
+      
+      **Stratégie incrémentale :** Nouveaux statuts uniquement
+      **Clé unique :** [id_mission, date_statut]
+      **Usage :** Reporting quotidien et analyses de performance
+    columns:
+      - name: id_mission
+        description: "🔑 Identifiant unique de la mission"
+      - name: id_commercial
+        description: "🔗 Identifiant du commercial"
+      - name: nom_commercial
+        description: "👤 Nom du commercial prescripteur"
+      - name: prenom_commercial
+        description: "👤 Prénom du commercial prescripteur"
+      - name: nom_entreprise
+        description: "🏢 Nom de l'entreprise cliente"
+      - name: titre_mission
+        description: "📋 Titre de la mission"
+      - name: statut
+        description: "📊 Statut actuel dans le funnel"
+      - name: date_statut
+        description: "📅 Date du changement de statut"
+      - name: commentaire
+        description: "💬 Commentaire sur le statut"
+      - name: source_batch
+        description: "📦 Batch source pour traçabilité"
+      - name: loaded_at
+        description: "⏰ Timestamp de traitement dbt"
+
+  - name: fct_missions_window
+    description: |
+      **Table de faits avec stratégie de fenêtre glissante**
+      
+      Version optimisée pour corriger les données historiques.
+      Recharge automatiquement la dernière semaine pour gérer les corrections tardives.
+      
+      **Stratégie incrémentale :** Fenêtre glissante de 7 jours
+      **Clé unique :** [id_mission, date_statut]
+      **Avantage :** Corrige automatiquement les erreurs de saisie
+      **Usage :** Analyses nécessitant une précision maximale
+    columns:
+      - name: id_mission
+        description: "🔑 Identifiant unique de la mission"
+      - name: id_commercial
+        description: "🔗 Identifiant du commercial"
+      - name: nom_commercial
+        description: "👤 Nom du commercial prescripteur"
+      - name: prenom_commercial
+        description: "👤 Prénom du commercial prescripteur"
+      - name: nom_entreprise
+        description: "🏢 Nom de l'entreprise cliente"
+      - name: titre_mission
+        description: "📋 Titre de la mission"
+      - name: statut
+        description: "📊 Statut actuel dans le funnel"
+      - name: date_statut
+        description: "📅 Date du changement de statut"
+      - name: commentaire
+        description: "💬 Commentaire sur le statut"
+      - name: source_batch
+        description: "📦 Batch source pour traçabilité"
+      - name: loaded_at
+        description: "⏰ Timestamp de traitement dbt"

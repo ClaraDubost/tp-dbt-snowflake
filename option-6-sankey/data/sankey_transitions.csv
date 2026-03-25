@@ -1,0 +1,12 @@
+SOURCE_STATUT,TARGET_STATUT,NB_TRANSITIONS
+Nouveau,Premier contact,15
+Premier contact,Entretien planifié,11
+Entretien planifié,Entretien réalisé,10
+Entretien réalisé,Proposition envoyée,10
+Proposition envoyée,Négociation,6
+Négociation,Accepté,5
+Proposition envoyée,Accepté,3
+Premier contact,Abandonné,2
+Proposition envoyée,Refusé,1
+Premier contact,Refusé,1
+Négociation,Refusé,1

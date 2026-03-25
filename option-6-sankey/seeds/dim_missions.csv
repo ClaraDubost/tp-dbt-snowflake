@@ -1,0 +1,16 @@
+id_mission,id_commercial,titre_mission,description_mission,duree_mission_jours,salaire_propose_euros,competences_requises,date_creation
+1001,101,Développeur React Senior,Développement d'une application web moderne avec React et TypeScript,45,12000,React TypeScript JavaScript,2024-01-15
+1002,102,Data Engineer,Migration de données vers le cloud et mise en place pipeline ETL,60,15000,Python SQL AWS,2024-01-20
+1003,103,Analyste BI,Création de dashboards et analyse de données de vente,30,8000,PowerBI SQL Python,2024-01-25
+1004,104,Consultant ERP,Implémentation module financier SAP,90,25000,SAP Finance Conseil,2024-02-01
+1005,105,Chef de projet digital,Pilotage transformation digitale entreprise,120,30000,Gestion projet Agile,2024-02-05
+1006,106,Développeur Python,API REST et intégration système bancaire,40,10000,Python Django REST,2024-02-10
+1007,107,Spécialiste SEO,Optimisation référencement site e-commerce,25,6000,SEO Google Analytics,2024-02-15
+1008,108,Architecte Cloud,Design infrastructure cloud scalable,50,18000,AWS Docker Kubernetes,2024-02-20
+1009,109,UX/UI Designer,Refonte expérience utilisateur application mobile,35,9000,Figma UX Design,2024-02-25
+1010,110,Développeur Full Stack,Application de gestion interne,55,13000,Vue.js Node.js MongoDB,2024-03-01
+1011,111,Data Scientist,Modèles prédictifs pour diagnostic médical,70,20000,Python ML TensorFlow,2024-03-05
+1012,112,Développeur Mobile,Application mobile pour constructeur auto,80,22000,React Native iOS Android,2024-03-10
+1013,113,Consultant Green IT,Audit et optimisation consommation énergétique,20,5000,Audit Environnement,2024-03-15
+1014,101,Tech Lead,Encadrement équipe développement produit,90,28000,Leadership Architecture,2024-03-20
+1015,103,Business Analyst,Analyse besoins et spécifications fonctionnelles,40,11000,Analyse fonctionnelle UML,2024-03-25

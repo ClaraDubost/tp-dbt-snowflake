@@ -1,0 +1,200 @@
+version: 2
+
+seeds:
+  # ========== TABLES DE DIMENSIONS ==========
+  - name: dim_entreprises
+    description: |
+      **📊 Table de référence des entreprises**
+      
+      Données maîtres des entreprises clientes et prospects.
+      Source principale pour l'analyse sectorielle et géographique.
+      
+      **Mise à jour :** Manuelle via CSV
+      **Lignes :** 10 entreprises
+      **Utilisation :** Base pour les analyses client et segmentation
+    columns:
+      - name: id_entreprise
+        description: "🔑 Identifiant unique de l'entreprise"
+        tests:
+          - unique
+          - not_null
+      - name: nom_entreprise
+        description: "🏢 Raison sociale de l'entreprise"
+        tests:
+          - not_null
+          - unique
+      - name: secteur_activite
+        description: "🏭 Secteur économique principal (Tech, Finance, Santé, etc.)"
+      - name: taille_entreprise
+        description: "📏 Catégorie de taille basée sur l'effectif"
+        tests:
+          - accepted_values:
+              values: ['PME', 'Startup', 'Grande entreprise']
+      - name: ville
+        description: "📍 Localisation géographique du siège"
+
+  - name: dim_commercial
+    description: |
+      **👥 Table de référence des contacts commerciaux**
+      
+      Annuaire des personnes contacts dans chaque entreprise.
+      Permet le suivi personnalisé et l'analyse de performance par interlocuteur.
+      
+      **Mise à jour :** Manuelle via CSV
+      **Lignes :** 13 commerciaux
+      **Relation :** Chaque commercial appartient à une entreprise
+    columns:
+      - name: id_commercial
+        description: "🔑 Identifiant unique du commercial"
+        tests:
+          - unique
+          - not_null
+      - name: id_entreprise
+        description: "🔗 Référence vers l'entreprise (clé étrangère)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_entreprises')
+              field: id_entreprise
+      - name: nom_commercial
+        description: "👤 Nom de famille du contact"
+      - name: prenom_commercial
+        description: "👤 Prénom du contact"
+      - name: email_commercial
+        description: "📧 Email professionnel (contact principal)"
+        tests:
+          - not_null
+          - unique
+      - name: telephone
+        description: "📞 Numéro de téléphone direct"
+
+  - name: dim_missions
+    description: |
+      **🎯 Catalogue des missions freelance disponibles**
+      
+      Base de données de toutes les opportunités de missions proposées.
+      Source pour l'analyse de la demande, des compétences et de la tarification.
+      
+      **Mise à jour :** Manuelle via CSV
+      **Lignes :** 15 missions
+      **Scope :** Missions IT et conseil principalement
+    columns:
+      - name: id_mission
+        description: "🔑 Identifiant unique de la mission"
+        tests:
+          - unique
+          - not_null
+      - name: id_commercial
+        description: "🔗 Commercial prescripteur de la mission"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_commercial')
+              field: id_commercial
+      - name: titre_mission
+        description: "📋 Intitulé court de la mission"
+      - name: description_mission
+        description: "📝 Description détaillée des tâches et livrables"
+      - name: duree_mission_jours
+        description: "📅 Durée estimée en jours ouvrés"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: salaire_propose_euros
+        description: "💰 Budget total proposé en euros"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: competences_requises
+        description: "🎯 Stack technique et compétences nécessaires"
+      - name: date_creation
+        description: "📅 Date de création de l'offre de mission"
+
+  # ========== TABLES DE FAITS ==========
+  - name: fct_missions
+    description: |
+      **📈 Historique des statuts des missions (Batch 1)**
+      
+      Premier lot de données sur l'évolution des statuts des missions.
+      Contient les transitions initiales du funnel commercial.
+      
+      **Période :** Données historiques initiales
+      **Lignes :** 39 changements de statut
+      **Usage :** Construction de la table base_statuts_missions
+    columns:
+      - name: id_mission
+        description: "🔗 Référence vers la mission concernée"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_missions')
+              field: id_mission
+      - name: statut
+        description: |
+          **📊 Statut dans le funnel commercial**
+          
+          États possibles du processus de vente :
+          - 🆕 **Nouveau** : Mission proposée
+          - 📞 **Premier contact** : Prise de contact effectuée
+          - 📅 **Entretien planifié** : RDV programmé
+          - ✅ **Entretien réalisé** : Entretien client passé
+          - 📋 **Proposition envoyée** : Devis transmis
+          - 🤝 **Négociation** : Discussion tarifaire
+          - ✅ **Accepté** : Mission gagnée
+          - ❌ **Refusé** : Mission perdue
+          - 🚫 **Abandonné** : Arrêt du processus
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Nouveau', 'Premier contact', 'Entretien planifié', 'Entretien réalisé', 'Proposition envoyée', 'Négociation', 'Refusé', 'Abandonné', 'Accepté']
+      - name: date_statut
+        description: "📅 Horodatage du changement de statut"
+        tests:
+          - not_null
+      - name: commentaire
+        description: "💬 Note libre sur le contexte du changement"
+
+  - name: fct_missions_batch2
+    description: |
+      **📈 Historique des statuts des missions (Batch 2)**
+      
+      Second lot de données sur l'évolution des statuts.
+      Complète les données du premier batch avec des mises à jour récentes.
+      
+      **Période :** Données récentes et corrections
+      **Lignes :** 41 changements de statut
+      **Usage :** Construction de la table base_statuts_missions
+    columns:
+      - name: id_mission
+        description: "🔗 Référence vers la mission concernée"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_missions')
+              field: id_mission
+      - name: statut
+        description: |
+          **📊 Statut dans le funnel commercial**
+          
+          États possibles du processus de vente :
+          - 🆕 **Nouveau** : Mission proposée
+          - 📞 **Premier contact** : Prise de contact effectuée
+          - 📅 **Entretien planifié** : RDV programmé
+          - ✅ **Entretien réalisé** : Entretien client passé
+          - 📋 **Proposition envoyée** : Devis transmis
+          - 🤝 **Négociation** : Discussion tarifaire
+          - ✅ **Accepté** : Mission gagnée
+          - ❌ **Refusé** : Mission perdue
+          - 🚫 **Abandonné** : Arrêt du processus
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Nouveau', 'Premier contact', 'Entretien planifié', 'Entretien réalisé', 'Proposition envoyée', 'Négociation', 'Refusé', 'Abandonné', 'Accepté']
+      - name: date_statut
+        description: "📅 Horodatage du changement de statut"
+        tests:
+          - not_null
+      - name: commentaire
+        description: "💬 Note libre sur le contexte du changement"
